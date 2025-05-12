@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const connectToDatabase = require('../config/db'); 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', async (req, res) => {
+  const db = await connectToDatabase();
+  const pets = await db.collection('petsCollection').find().toArray();
+
+  res.render('index', { pets }); 
 });
 
 module.exports = router;
