@@ -13,5 +13,9 @@
     "http-errors": "~1.6.3",
     "mongodb": "^6.16.0",
     "morgan": "~1.9.1"
-  }
+  },
+  "engines": {
+  "node": "18.x"
+}
+
 }
