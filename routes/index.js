@@ -1,3 +1,4 @@
+const fetch = import('node-fetch');
 const express = require('express');
 const router = express.Router();
 const connectToDatabase = require('../config/db'); 
