@@ -7,4 +7,29 @@
 </form>
 
 
+<div id="petsDiv">
+    {{#if petsCollection.length}}
+    
+      <ul>
+          {{#each petsCollection}}
+        <div class = "img_card">
+                <img src="{{this.petsImage}}"/>
+                <h3>{{this.petsName}}</h3>
+                <h3>{{this.petsAge}}</h3>
+             <div id = "likeDiv">
+                <button id = "likeButton">Like Count</button>
+              <p id="likeNum"></p>
+             </div>
+     </div>
+
+          {{/each}}
+      </ul>
+    {{else}}
+        <p>No items found.</p>
+    {{/if}}
+</div>
+
+
+
+
 

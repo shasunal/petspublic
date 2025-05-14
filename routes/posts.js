@@ -9,6 +9,7 @@ const { getDb } = require("../config/db");
 
 
 router.post("/", upload.single('image'), async (req, res) => {
+    
     try {
       const db = getDb();
       const { petsName, petsAge } = req.body;
@@ -17,7 +18,7 @@ router.post("/", upload.single('image'), async (req, res) => {
       if (!req.file || !req.file.path) {
         return res.status(400).json({ message: "Image is required" });
       }
-  
+      
       const newPet = {
         petsName,
         petsAge,
@@ -26,7 +27,10 @@ router.post("/", upload.single('image'), async (req, res) => {
       };
   
       await db.collection("petsCollection").insertOne(newPet);
-      res.status(201).json({ message: "Pet added" });
+      //finds all images and saves as array
+      const petsCollection = await db.collection('petsCollection').find().toArray();
+
+      res.render('index',{petsCollection} );
     } catch (err) {
       console.error("POST error:", err);
       res.status(500).json({ message: "Internal Server Error" });

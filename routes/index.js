@@ -8,9 +8,17 @@ router.get('/', async (req, res) => {
   if (!db) {
     return res.status(500).send('Database not connected.');
   }
-
-  const pets = await db.collection('petsCollection').find().toArray();
-  res.render('index', { pets });
+try{
+  //renders pets collection initally
+  const petsCollection = await db.collection('petsCollection').find().toArray();
+  res.render('index',{petsCollection} );
+  
+}catch(err){
+  console.error("error", err);
+  res.status(500).send("failed");
+}
 });
+
+
 
 module.exports = router; 

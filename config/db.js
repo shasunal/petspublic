@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://pets:pets@cluster1.b1z5vym.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
+require('dotenv').config(); // load .env variables
+const uri = process.env.MONGO_URI;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -30,5 +31,3 @@ module.exports = {
   getDb
 };
 
-
-module.exports = { connectToDatabase, getDb };
