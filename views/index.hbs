@@ -1,15 +1,10 @@
-<h1>Pets Collection</h1>
-<ul>
-  {{#each pets}}
-    <li>Name: {{name}} Email: {{email}} Age: {{age}}</li> 
-    
-  {{/each}}
-</ul>
-<form id="uploadForm" enctype="multipart/form-data" method="POST" action="/posts">
-  <input type="text" name="petsName" placeholder="Pet Name" required>
-  <input type="text" name="petsAge" placeholder="Pet Age" required>
+
+<form action="/posts" method="POST" enctype="multipart/form-data">
+  <h2>Pet's Name:</h2><input type="text" name="petsName" placeholder="Pet Name" required>
+  <h2>Pet's Age:</h2><input type="text" name="petsAge" placeholder="Pet Age" required>
   <input type="file" name="image" required>
   <button type="submit">Upload Pet</button>
 </form>
+
 
 

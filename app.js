@@ -6,10 +6,13 @@ var logger = require('morgan');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
+console.log('indexRouter:', typeof indexRouter);
 var usersRouter = require('./routes/users');
+console.log('usersRouter:', typeof usersRouter);
 var postsRouter = require('./routes/posts');
-const {storage }= require('./config/cloudinary');
-
+console.log('postsRouter:', typeof postsRouter);
+const { connectToDatabase } = require('./config/db');
+connectToDatabase();
 
 
 var app = express();
