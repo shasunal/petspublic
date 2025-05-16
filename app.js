@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const hbs = require('hbs');
 var logger = require('morgan');
 require('dotenv').config();
 
@@ -11,16 +12,19 @@ var usersRouter = require('./routes/users');
 console.log('usersRouter:', typeof usersRouter);
 var postsRouter = require('./routes/posts');
 console.log('postsRouter:', typeof postsRouter);
+
 const { connectToDatabase } = require('./config/db');
 connectToDatabase();
 
-
 var app = express();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+hbs.registerHelper('eq', function (a, b) {
+  return a === b;
+});
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,14 +36,13 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 
-
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

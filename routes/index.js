@@ -1,24 +1,32 @@
-const fetch = import('node-fetch');
 const express = require('express');
 const router = express.Router();
 const { getDb } = require('../config/db');
 
 router.get('/', async (req, res) => {
   const db = getDb();
-  if (!db) {
-    return res.status(500).send('Database not connected.');
+  if (!db) return res.status(500).send('Database not connected.');
+
+  try {
+    const { type, name, caption } = req.query;
+    const query = {};
+
+    if (type) query.petsType = type;
+    if (name) query.petsName = { $regex: new RegExp(name, 'i') };
+    if (caption) query.petsCaption = { $regex: new RegExp(caption, 'i') };
+
+    const petsCollection = await db.collection('petsCollection').find(query).toArray();
+
+    res.render('index', {
+      petsCollection,
+      selectedType: type || '',
+      searchName: name || '',
+      searchCaption: caption || ''
+    });
+
+  } catch (err) {
+    console.error("Gallery fetch error", err);
+    res.status(500).send("Failed to load gallery");
   }
-try{
-  //renders pets collection initally
-  const petsCollection = await db.collection('petsCollection').find().toArray();
-  res.render('index',{petsCollection} );
-  
-}catch(err){
-  console.error("error", err);
-  res.status(500).send("failed");
-}
 });
 
-
-
-module.exports = router; 
+module.exports = router;

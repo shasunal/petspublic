@@ -1,35 +1,107 @@
-
-<form action="/posts" method="POST" enctype="multipart/form-data">
-  <h2>Pet's Name:</h2><input type="text" name="petsName" placeholder="Pet Name" required>
-  <h2>Pet's Age:</h2><input type="text" name="petsAge" placeholder="Pet Age" required>
-  <input type="file" name="image" required>
-  <button type="submit">Upload Pet</button>
-</form>
-
-
-<div id="petsDiv">
-    {{#if petsCollection.length}}
-    
-      <ul>
-          {{#each petsCollection}}
-        <div class = "img_card">
-                <img src="{{this.petsImage}}"/>
-                <h3>{{this.petsName}}</h3>
-                <h3>{{this.petsAge}}</h3>
-             <div id = "likeDiv">
-                <button id = "likeButton">Like Count</button>
-              <p id="likeNum"></p>
-             </div>
-     </div>
-
-          {{/each}}
-      </ul>
-    {{else}}
-        <p>No items found.</p>
-    {{/if}}
+<div class="popup-overlay" id="introPopup">
+  <div class="popup">
+    <h3>Post a Pet</h3>
+    <p>Post a Pet is a public pet archive. Share a photo of your pet or just look around!</p>
+    <div class="intro-buttons">
+      <button id="goToGallery">View Gallery</button>
+      <button id="goToSubmit">Post a Pet</button>
+    </div>
+  </div>
 </div>
 
+<div class="popup-overlay" id="submitPopup">
+  <div class="popup">
+    <button class="close-popup" id="closeSubmit" aria-label="Close">&times;</button>
+    <h3>Post a Pet</h3>
+    <form action="/posts" method="POST" enctype="multipart/form-data">
+      <input type="text" name="petsName" placeholder="Pet Name" required>
+      <textarea name="petsCaption" placeholder="Caption" required></textarea>
+      <select name="petsType" required>
+        <option value="">Type</option>
+        <option value="cat">Cat</option>
+        <option value="dog">Dog</option>
+        <option value="fish">Fish</option>
+        <option value="bird">Bird</option>
+        <option value="reptile">Reptile</option>
+        <option value="hamster">Hamster</option>
+        <option value="rabbit">Rabbit</option>
+        <option value="guineapig">Guinea Pig</option>
+      </select>
+      <input type="file" name="image" required>
+      <button type="submit">Upload Pet</button>
+    </form>
+  </div>
+</div>
 
+<h1>૮ - ﻌ • ა</h1>
+<h2>Post a Pet</h2>
 
+<button id="cornerPostBtn" class="corner-button">Post</button>
 
+<form method="GET" action="/gallery">
+  <label for="type">Filter by Type</label>
+  <select name="type" id="type">
+    <option value="">All</option>
+    <option value="cat" {{#if (eq selectedType "cat" )}}selected{{/if}}>Cat</option>
+    <option value="dog" {{#if (eq selectedType "dog" )}}selected{{/if}}>Dog</option>
+    <option value="fish" {{#if (eq selectedType "fish" )}}selected{{/if}}>Fish</option>
+    <option value="bird" {{#if (eq selectedType "bird" )}}selected{{/if}}>Bird</option>
+    <option value="reptile" {{#if (eq selectedType "reptile" )}}selected{{/if}}>Reptile</option>
+    <option value="hamster" {{#if (eq selectedType "hamster" )}}selected{{/if}}>Hamster</option>
+    <option value="rabbit" {{#if (eq selectedType "rabbit" )}}selected{{/if}}>Rabbit</option>
+    <option value="guineapig" {{#if (eq selectedType "guineapig" )}}selected{{/if}}>Guinea Pig</option>
+  </select>
+</form>
 
+<div id="gallery">
+  {{#if petsCollection.length}}
+  {{#each petsCollection}}
+  <div class="img_card">
+    <img src="{{this.petsImage}}" />
+    <h3>{{this.petsName}}</h3>
+    <p>{{this.petsCaption}}</p>
+  </div>
+  {{/each}}
+  {{else}}
+  <p>No pets submitted yet.</p>
+  {{/if}}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const introPopup = document.getElementById('introPopup');
+    const submitPopup = document.getElementById('submitPopup');
+
+    const goToGallery = document.getElementById('goToGallery');
+    const goToSubmit = document.getElementById('goToSubmit');
+    const cornerPostBtn = document.getElementById('cornerPostBtn');
+    const closeSubmit = document.getElementById('closeSubmit');
+
+    if (introPopup) introPopup.style.display = 'flex';
+
+    if (goToGallery) {
+      goToGallery.addEventListener('click', function () {
+        introPopup.style.display = 'none';
+      });
+    }
+
+    if (goToSubmit && submitPopup) {
+      goToSubmit.addEventListener('click', function () {
+        introPopup.style.display = 'none';
+        submitPopup.style.display = 'flex';
+      });
+    }
+
+    if (cornerPostBtn && submitPopup) {
+      cornerPostBtn.addEventListener('click', function () {
+        submitPopup.style.display = 'flex';
+      });
+    }
+
+    if (closeSubmit && submitPopup) {
+      closeSubmit.addEventListener('click', function () {
+        submitPopup.style.display = 'none';
+      });
+    }
+  });
+</script>
