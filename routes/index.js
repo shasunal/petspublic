@@ -14,7 +14,12 @@ router.get('/', async (req, res) => {
     if (name) query.petsName = { $regex: new RegExp(name, 'i') };
     if (caption) query.petsCaption = { $regex: new RegExp(caption, 'i') };
 
-    const petsCollection = await db.collection('petsCollection').find(query).toArray();
+    const petsCollection = await db.collection('petsCollection')
+    .find(query) 
+    .sort({ _id: -1 })
+    .toArray();
+  
+
 
     res.render('index', {
       petsCollection,
@@ -27,6 +32,11 @@ router.get('/', async (req, res) => {
     console.error("Gallery fetch error", err);
     res.status(500).send("Failed to load gallery");
   }
+
+
+
+
+  
 });
 
 module.exports = router;

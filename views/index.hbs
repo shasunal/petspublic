@@ -3,8 +3,8 @@
     <h3>Post a Pet</h3>
     <p>Post a Pet is a public pet archive. Share a photo of your pet or just look around!</p>
     <div class="intro-buttons">
-      <button id="goToGallery">View Gallery</button>
-      <button id="goToSubmit">Post a Pet</button>
+      <button id="goToSubmit"> Create An Entry </button>
+      <button id="goToGallery"> View Gallery </button>
     </div>
   </div>
 </div>
@@ -15,6 +15,7 @@
     <h3>Post a Pet</h3>
     <form action="/posts" method="POST" enctype="multipart/form-data">
       <input type="text" name="petsName" placeholder="Pet Name" required>
+      <input type="text" name="petsAge" placeholder="Pet Age" required>
       <textarea name="petsCaption" placeholder="Caption" required></textarea>
       <select name="petsType" required>
         <option value="">Type</option>
@@ -33,51 +34,76 @@
   </div>
 </div>
 
-<h1>૮ - ﻌ • ა</h1>
+<h1>ඃ - ﻈ • ඃ</h1>
 <h2>Post a Pet</h2>
 
 <button id="cornerPostBtn" class="corner-button">Post</button>
 
-<form method="GET" action="/gallery">
+<form class="filterform" method="GET" action="/">
   <label for="type">Filter by Type</label>
-  <select name="type" id="type">
+  <select name="type" id="type" onchange="this.form.submit()">
+
     <option value="">All</option>
-    <option value="cat" {{#if (eq selectedType "cat" )}}selected{{/if}}>Cat</option>
-    <option value="dog" {{#if (eq selectedType "dog" )}}selected{{/if}}>Dog</option>
-    <option value="fish" {{#if (eq selectedType "fish" )}}selected{{/if}}>Fish</option>
-    <option value="bird" {{#if (eq selectedType "bird" )}}selected{{/if}}>Bird</option>
-    <option value="reptile" {{#if (eq selectedType "reptile" )}}selected{{/if}}>Reptile</option>
-    <option value="hamster" {{#if (eq selectedType "hamster" )}}selected{{/if}}>Hamster</option>
-    <option value="rabbit" {{#if (eq selectedType "rabbit" )}}selected{{/if}}>Rabbit</option>
-    <option value="guineapig" {{#if (eq selectedType "guineapig" )}}selected{{/if}}>Guinea Pig</option>
+    <option value="cat" {{#if (eq selectedType "cat")}}selected{{/if}}>Cat</option>
+    <option value="dog" {{#if (eq selectedType "dog")}}selected{{/if}}>Dog</option>
+    <option value="fish" {{#if (eq selectedType "fish")}}selected{{/if}}>Fish</option>
+    <option value="bird" {{#if (eq selectedType "bird")}}selected{{/if}}>Bird</option>
+    <option value="reptile" {{#if (eq selectedType "reptile")}}selected{{/if}}>Reptile</option>
+    <option value="hamster" {{#if (eq selectedType "hamster")}}selected{{/if}}>Hamster</option>
+    <option value="rabbit" {{#if (eq selectedType "rabbit")}}selected{{/if}}>Rabbit</option>
+    <option value="guineapig" {{#if (eq selectedType "guineapig")}}selected{{/if}}>Guinea Pig</option>
   </select>
 </form>
 
-<div id="gallery">
-  {{#if petsCollection.length}}
-  {{#each petsCollection}}
-  <div class="img_card">
-    <img src="{{this.petsImage}}" />
-    <h3>{{this.petsName}}</h3>
-    <p>{{this.petsCaption}}</p>
+<div class="gallery-wrapper">
+  <div id="gallery">
+    {{#if petsCollection.length}}
+      {{#each petsCollection}}
+      <div class="img_card">
+        <div class="image-container">
+          <img src="{{this.petsImage}}" alt="{{this.petsName}}" />
+          <form class="like-form" action="/posts/like/{{this._id}}" method="POST">
+            <div class="like-row">
+              <button id="heartbtn" type="submit">♡</button>
+              <span class="like-count">{{this.likeCount}} Likes</span>
+            </div>
+          </form>
+        </div>
+        <h3>{{this.petsName}}</h3>
+        <h4>Age: {{this.petsAge}}</h4>
+        <h4>Species: {{this.petsType}}</h4>
+        <p>{{this.petsCaption}}</p>
+      </div>
+      {{/each}}
+    {{else}}
+      <p>No pets submitted yet.</p>
+    {{/if}}
   </div>
-  {{/each}}
-  {{else}}
-  <p>No pets submitted yet.</p>
-  {{/if}}
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const introPopup = document.getElementById('introPopup');
     const submitPopup = document.getElementById('submitPopup');
-
     const goToGallery = document.getElementById('goToGallery');
     const goToSubmit = document.getElementById('goToSubmit');
     const cornerPostBtn = document.getElementById('cornerPostBtn');
     const closeSubmit = document.getElementById('closeSubmit');
 
-    if (introPopup) introPopup.style.display = 'flex';
+    const isFirstVisit = (
+      window.location.pathname === '/' &&
+      !window.location.search &&
+      !sessionStorage.getItem('popupSeen')
+    );
+
+    if (introPopup && isFirstVisit) {
+  introPopup.style.display = 'flex';
+  sessionStorage.setItem('popupSeen', 'true');
+} else {
+  introPopup.style.display = 'none'; 
+  submitPopup.style.display = 'none';
+}
+
 
     if (goToGallery) {
       goToGallery.addEventListener('click', function () {
@@ -85,12 +111,15 @@
       });
     }
 
-    if (goToSubmit && submitPopup) {
-      goToSubmit.addEventListener('click', function () {
-        introPopup.style.display = 'none';
-        submitPopup.style.display = 'flex';
-      });
-    }
+   if (goToSubmit && submitPopup && introPopup) {
+  goToSubmit.addEventListener('click', function () {
+    introPopup.style.display = 'none';
+    setTimeout(() => {
+      submitPopup.style.display = 'flex';
+    }, 50);
+  });
+}
+
 
     if (cornerPostBtn && submitPopup) {
       cornerPostBtn.addEventListener('click', function () {
@@ -103,5 +132,12 @@
         submitPopup.style.display = 'none';
       });
     }
+
+    const likeForms = document.querySelectorAll('.like-form');
+    likeForms.forEach(form => {
+      form.addEventListener('submit', () => {
+        if (introPopup) introPopup.style.display = 'none';
+      });
+    });
   });
 </script>
