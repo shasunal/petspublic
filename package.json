@@ -5,8 +5,9 @@
     "start": "node ./bin/www"
   },
   "engines": {
-    "node": "18.x"
-  },
+  "node": ">=14"
+},
+
   "dependencies": {
     "cloudinary": "^1.41.3",
     "cookie-parser": "~1.4.4",
