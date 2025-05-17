@@ -15,7 +15,6 @@
     <h3>Post a Pet</h3>
     <form action="/posts" method="POST" enctype="multipart/form-data">
       <input type="text" name="petsName" placeholder="Pet Name" required>
-      <input type="text" name="petsAge" placeholder="Pet Age" required>
       <textarea name="petsCaption" placeholder="Caption" required></textarea>
       <select name="petsType" required>
         <option value="">Type</option>
@@ -34,7 +33,6 @@
   </div>
 </div>
 
-
 <h1>૮ - ﻌ • ა</h1>
 <h2>Post a Pet</h2>
 
@@ -45,39 +43,37 @@
   <select name="type" id="type" onchange="this.form.submit()">
 
     <option value="">All</option>
-    <option value="cat" {{#if (eq selectedType "cat")}}selected{{/if}}>Cat</option>
-    <option value="dog" {{#if (eq selectedType "dog")}}selected{{/if}}>Dog</option>
-    <option value="fish" {{#if (eq selectedType "fish")}}selected{{/if}}>Fish</option>
-    <option value="bird" {{#if (eq selectedType "bird")}}selected{{/if}}>Bird</option>
-    <option value="reptile" {{#if (eq selectedType "reptile")}}selected{{/if}}>Reptile</option>
-    <option value="hamster" {{#if (eq selectedType "hamster")}}selected{{/if}}>Hamster</option>
-    <option value="rabbit" {{#if (eq selectedType "rabbit")}}selected{{/if}}>Rabbit</option>
-    <option value="guineapig" {{#if (eq selectedType "guineapig")}}selected{{/if}}>Guinea Pig</option>
+    <option value="cat" {{#if (eq selectedType "cat" )}}selected{{/if}}>Cat</option>
+    <option value="dog" {{#if (eq selectedType "dog" )}}selected{{/if}}>Dog</option>
+    <option value="fish" {{#if (eq selectedType "fish" )}}selected{{/if}}>Fish</option>
+    <option value="bird" {{#if (eq selectedType "bird" )}}selected{{/if}}>Bird</option>
+    <option value="reptile" {{#if (eq selectedType "reptile" )}}selected{{/if}}>Reptile</option>
+    <option value="hamster" {{#if (eq selectedType "hamster" )}}selected{{/if}}>Hamster</option>
+    <option value="rabbit" {{#if (eq selectedType "rabbit" )}}selected{{/if}}>Rabbit</option>
+    <option value="guineapig" {{#if (eq selectedType "guineapig" )}}selected{{/if}}>Guinea Pig</option>
   </select>
 </form>
 
 <div class="gallery-wrapper">
   <div id="gallery">
     {{#if petsCollection.length}}
-      {{#each petsCollection}}
-      <div class="img_card">
-        <div class="image-container">
-          <img src="{{this.petsImage}}" alt="{{this.petsName}}" />
-          <form class="like-form" action="/posts/like/{{this._id}}" method="POST">
-            <div class="like-row">
-              <button id="heartbtn" type="submit">♡</button>
-              <span class="like-count">{{this.likeCount}} Likes</span>
-            </div>
-          </form>
-        </div>
-        <h3>{{this.petsName}}</h3>
-        <h4>Age: {{this.petsAge}}</h4>
-        <h4>Species: {{this.petsType}}</h4>
-        <p>{{this.petsCaption}}</p>
+    {{#each petsCollection}}
+    <div class="img_card">
+      <div class="image-container">
+        <img src="{{this.petsImage}}" alt="{{this.petsName}}" />
+        <form class="like-form" action="/posts/like/{{this._id}}" method="POST">
+          <div class="like-row">
+            <button id="heartbtn" type="submit">♡</button>
+            <span class="like-count">{{this.likeCount}} Likes</span>
+          </div>
+        </form>
       </div>
-      {{/each}}
+      <h3>{{this.petsName}}</h3>
+      <p>{{this.petsCaption}}</p>
+    </div>
+    {{/each}}
     {{else}}
-      <p>No pets submitted yet.</p>
+    <p>No pets submitted yet.</p>
     {{/if}}
   </div>
 </div>
