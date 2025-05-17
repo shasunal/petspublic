@@ -34,6 +34,7 @@
   </div>
 </div>
 
+
 <h1>૮ - ﻌ • ა</h1>
 <h2>Post a Pet</h2>
 
@@ -90,6 +91,10 @@
     const cornerPostBtn = document.getElementById('cornerPostBtn');
     const closeSubmit = document.getElementById('closeSubmit');
 
+    // Hide popups initially
+    if (introPopup) introPopup.style.display = 'none';
+    if (submitPopup) submitPopup.style.display = 'none';
+
     const isFirstVisit = (
       window.location.pathname === '/' &&
       !window.location.search &&
@@ -97,39 +102,33 @@
     );
 
     if (introPopup && isFirstVisit) {
-  introPopup.style.display = 'flex';
-  sessionStorage.setItem('popupSeen', 'true');
-} else {
-  introPopup.style.display = 'none'; 
-  submitPopup.style.display = 'none';
-}
-
+      introPopup.style.display = 'flex';
+      sessionStorage.setItem('popupSeen', 'true');
+    }
 
     if (goToGallery) {
       goToGallery.addEventListener('click', function () {
-        introPopup.style.display = 'none';
+        if (introPopup) introPopup.style.display = 'none';
+        if (submitPopup) submitPopup.style.display = 'none';
       });
     }
 
-   if (goToSubmit && submitPopup && introPopup) {
-  goToSubmit.addEventListener('click', function () {
-    introPopup.style.display = 'none';
-    setTimeout(() => {
-      submitPopup.style.display = 'flex';
-    }, 50);
-  });
-}
+    if (goToSubmit) {
+      goToSubmit.addEventListener('click', function () {
+        if (introPopup) introPopup.style.display = 'none';
+        if (submitPopup) submitPopup.style.display = 'flex';
+      });
+    }
 
-
-    if (cornerPostBtn && submitPopup) {
+    if (cornerPostBtn) {
       cornerPostBtn.addEventListener('click', function () {
-        submitPopup.style.display = 'flex';
+        if (submitPopup) submitPopup.style.display = 'flex';
       });
     }
 
-    if (closeSubmit && submitPopup) {
+    if (closeSubmit) {
       closeSubmit.addEventListener('click', function () {
-        submitPopup.style.display = 'none';
+        if (submitPopup) submitPopup.style.display = 'none';
       });
     }
 

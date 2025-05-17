@@ -56,7 +56,8 @@
 }
 
 #submitPopup {
-  display: none !important;
+  display: none;
+  align-items: center;
 }
 
 .filterform {
@@ -338,10 +339,7 @@ h4{
 
 
 #submitPopup.popup-overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;  
+  display: none; 
 }
 
 
